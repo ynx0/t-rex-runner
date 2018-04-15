@@ -65,11 +65,11 @@
         this.images = {};
         this.imagesLoaded = 0;
 
-        if (this.isDisabled()) {
-            this.setupDisabledRunner();
-        } else {
+        // if (this.isDisabled()) {
+        //     this.setupDisabledRunner();
+        // } else {
             this.loadImages();
-        }
+        // }
     }
     window['Runner'] = Runner;
 
@@ -233,28 +233,28 @@
          * Whether the easter egg has been disabled. CrOS enterprise enrolled devices.
          * @return {boolean}
          */
-        isDisabled: function () {
-            // return loadTimeData && loadTimeData.valueExists('disabledEasterEgg');
-            return false;
-        },
+        // isDisabled: function () {
+        //     // return loadTimeData && loadTimeData.valueExists('disabledEasterEgg');
+        //     return false;
+        // },
 
-        /**
-         * For disabled instances, set up a snackbar with the disabled message.
-         */
-        setupDisabledRunner: function () {
-            this.containerEl = document.createElement('div');
-            this.containerEl.className = Runner.classes.SNACKBAR;
-            this.containerEl.textContent = loadTimeData.getValue('disabledEasterEgg');
-            this.outerContainerEl.appendChild(this.containerEl);
-
-            // Show notification when the activation key is pressed.
-            document.addEventListener(Runner.events.KEYDOWN, function (e) {
-                if (Runner.keycodes.JUMP[e.keyCode]) {
-                    this.containerEl.classList.add(Runner.classes.SNACKBAR_SHOW);
-                    document.querySelector('.icon').classList.add('icon-disabled');
-                }
-            }.bind(this));
-        },
+        // /**
+        //  * For disabled instances, set up a snackbar with the disabled message.
+        //  */
+        // setupDisabledRunner: function () {
+        //     this.containerEl = document.createElement('div');
+        //     this.containerEl.className = Runner.classes.SNACKBAR;
+        //     this.containerEl.textContent = loadTimeData.getValue('disabledEasterEgg');
+        //     this.outerContainerEl.appendChild(this.containerEl);
+        //
+        //     // Show notification when the activation key is pressed.
+        //     document.addEventListener(Runner.events.KEYDOWN, function (e) {
+        //         if (Runner.keycodes.JUMP[e.keyCode]) {
+        //             this.containerEl.classList.add(Runner.classes.SNACKBAR_SHOW);
+        //             document.querySelector('.icon').classList.add('icon-disabled');
+        //         }
+        //     }.bind(this));
+        // },
 
         /**
          * Setting individual settings for debugging.
@@ -497,14 +497,14 @@
             this.playCount++;
 
             // Handle tabbing off the page. Pause the current game.
-            document.addEventListener(Runner.events.VISIBILITY,
-                this.onVisibilityChange.bind(this));
-
-            window.addEventListener(Runner.events.BLUR,
-                this.onVisibilityChange.bind(this));
-
-            window.addEventListener(Runner.events.FOCUS,
-                this.onVisibilityChange.bind(this));
+            // document.addEventListener(Runner.events.VISIBILITY,
+            //     this.onVisibilityChange.bind(this));
+            //
+            // window.addEventListener(Runner.events.BLUR,
+            //     this.onVisibilityChange.bind(this));
+            //
+            // window.addEventListener(Runner.events.FOCUS,
+            //     this.onVisibilityChange.bind(this));
         },
 
         clearCanvas: function () {
@@ -700,7 +700,6 @@
             }
         },
 
-
         /**
          * Process key up.
          * @param {Event} e
@@ -731,6 +730,7 @@
                 this.play();
             }
         },
+
 
         /**
          * Returns whether the event was a left click on canvas.
@@ -829,19 +829,35 @@
                 this.update();
             }
         },
+        /*
+        //=================custom hooks=====================\\
+        */
+        triggerJump: function () {
+            this.tRex.startJump(this.currentSpeed);
+        },
+        triggerDuck: function() {
+            this.tRex.speedDrop = false;
+            this.tRex.setDuck(true);
+        },
+        triggerReleaseDuck: function () {
+            this.tRex.setDuck(false);
+        },
+        /*
+        \\=================custom hooks=====================//
+        *\
 
         /**
          * Pause the game if the tab is not in focus.
          */
-        onVisibilityChange: function (e) {
-            if (document.hidden || document.webkitHidden || e.type == 'blur' ||
-                document.visibilityState != 'visible') {
-                this.stop();
-            } else if (!this.crashed) {
-                this.tRex.reset();
-                this.play();
-            }
-        },
+        // onVisibilityChange: function (e) {
+        //     if (document.hidden || document.webkitHidden || e.type == 'blur' ||
+        //         document.visibilityState != 'visible') {
+        //         this.stop();
+        //     } else if (!this.crashed) {
+        //         this.tRex.reset();
+        //         this.play();
+        //     }
+        // },
 
         /**
          * Play a sound.
@@ -2703,8 +2719,11 @@
 })();
 
 
+
 function onDocumentLoad() {
     new Runner('.interstitial-wrapper');
+    // automatically start game on load
+    // startGameInit();
 }
 
 document.addEventListener('DOMContentLoaded', onDocumentLoad);
