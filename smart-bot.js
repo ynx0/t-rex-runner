@@ -1,9 +1,9 @@
 'use strict';
 
-let minJumpDist = () => 140;
+let minJumpDist = 140;
 
 function shouldJump() {
-    return getNearestObstaclePos() <= minJumpDist();
+    return getNearestObstaclePos() <= minJumpDist;
 }
 
 function aiAction() {

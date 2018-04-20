@@ -7,10 +7,10 @@ let rate = 1 / 5;
 let timeRegularizationFactor = 1000;
 let aiCycleTime = 100;
 
-// // tensorflow
-// const model = tf.sequential();
-// model.add(tf.layers.dense({units: 1, inputShape: [1]}));
-// model.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
+// tensorflow
+const model = tf.sequential();
+model.add(tf.layers.dense({units: 1, inputShape: [1]}));
+model.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
 
 
 function getAdjRunningTime() {
