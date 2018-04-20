@@ -62,6 +62,34 @@ function startGameInit() {
     }
 }
 
+
+// MARK - image processing
+
+var imgIndex = 0;
+var maxImages = 15;
+
+function getCanvas() {
+    return Runner.instance_.canvas;
+}
+
+function getRawImgData() {
+    return Runner.instance_.canvasCtx.getImageData(0, 0, Runner.instance_.canvas.width, Runner.instance_.canvas.height);
+}
+
+// kinda useless, just for testing
+function appendImage() {
+    if (imgIndex > maxImages) {
+        imgIndex = 0; // reset index
+        $('#test-imgs').empty(); // del all imgs
+    }
+    getCanvas().toBlob((blobby) => {
+        var urlobj = window.URL.createObjectURL(blobby);
+        var $img_el = $("<img>", {id: "img-" + imgIndex++, src: urlobj});
+        $('#test-imgs').prepend($img_el);
+    });
+}
+
+
 // MARK - behavoiur
 function addScore(score) {
     scores.push(score);
@@ -74,7 +102,7 @@ function getObstacles() {
 
 function getNearestObstaclePos() {
     if (Runner.instance_.horizon.obstacles[0] == null || undefined) {
-        return null;
+        return 1e100; // prevent runner from jumping unnecessarily
     }
     var smallestDistance = Runner.instance_.horizon.obstacles[0].xPos;
 
@@ -85,6 +113,15 @@ function getNearestObstaclePos() {
     });
     return smallestDistance;
 }
+
+function isPaused() {
+    return !Runner.instance_.playing;
+}
+
+function getRunningTime() {
+    return Runner.instance_.runningTime;
+}
+
 
 window.lossCheck = setInterval(() => {
     if (isGameOver()) {
